@@ -17,32 +17,37 @@ public class Main {
         }
 
         List<Thread> threads = new ArrayList<>();
-
-        for (int i = 0; i < texts.length; i++) {
-            String currentText = texts[i];
-            Thread palindromeThread = new Thread(() -> {
+        Thread palindromeThread = new Thread(() -> {
+            for (int i = 0; i < texts.length; i++) {
+                String currentText = texts[i];
                 if (isPalindrome(currentText)) {
                     updateCounter(currentText);
                 }
-            });
-            Thread oneCharThread = new Thread(() -> {
+            }
+        });
+        Thread oneCharThread = new Thread(() -> {
+            for (int i = 0; i < texts.length; i++) {
+                String currentText = texts[i];
                 if (isOneChar(currentText)) {
                     updateCounter(currentText);
                 }
-            });
-            Thread floorAscendingThread = new Thread(() -> {
+            }
+        });
+        Thread floorAscendingThread = new Thread(() -> {
+            for (int i = 0; i < texts.length; i++) {
+                String currentText = texts[i];
                 if (isFloorAscending(currentText)) {
                     updateCounter(currentText);
                 }
-            });
+            }
+        });
 
-            palindromeThread.start();
-            oneCharThread.start();
-            floorAscendingThread.start();
-            threads.add(palindromeThread);
-            threads.add(oneCharThread);
-            threads.add(floorAscendingThread);
-        }
+        palindromeThread.start();
+        oneCharThread.start();
+        floorAscendingThread.start();
+        threads.add(palindromeThread);
+        threads.add(oneCharThread);
+        threads.add(floorAscendingThread);
 
         for (Thread thread : threads) {
             thread.join(); // зависаем, ждём когда поток объект которого лежит в thread завершится

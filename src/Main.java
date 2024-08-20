@@ -19,27 +19,29 @@ public class Main {
         List<Thread> threads = new ArrayList<>();
 
         for (int i = 0; i < texts.length; i++) {
-            int finalI = i;
-            Thread thread3 = new Thread(() -> {
-                if (isPretty(texts[finalI], 3))
-                    counter3.incrementAndGet();
+            String currentText = texts[i];
+            Thread palindromeThread = new Thread(() -> {
+                if (isPalindrome(currentText)) {
+                    updateCounter(currentText);
+                }
+            });
+            Thread oneCharThread = new Thread(() -> {
+                if (isOneChar(currentText)) {
+                    updateCounter(currentText);
+                }
+            });
+            Thread floorAscendingThread = new Thread(() -> {
+                if (isFloorAscending(currentText)) {
+                    updateCounter(currentText);
+                }
             });
 
-            Thread thread4 = new Thread(() -> {
-                if (isPretty(texts[finalI], 4))
-                    counter4.incrementAndGet();
-            });
-            Thread thread5 =new Thread(() -> {
-                if (isPretty(texts[finalI], 5))
-                    counter5.incrementAndGet();
-            });
-
-            thread3.start();
-            thread4.start();
-            thread5.start();
-            threads.add(thread3);
-            threads.add(thread4);
-            threads.add(thread5);
+            palindromeThread.start();
+            oneCharThread.start();
+            floorAscendingThread.start();
+            threads.add(palindromeThread);
+            threads.add(oneCharThread);
+            threads.add(floorAscendingThread);
         }
 
         for (Thread thread : threads) {
@@ -59,36 +61,33 @@ public class Main {
         return text.toString();
     }
 
-    public static boolean isPretty(String text, int length) {
-        if (text.length() == length) {
-            if (isPalindrome(text, length)) return true;
-            if (isOneChar(text, length)) return true;
-            return (isFloorAscending(text, length));
-        }
-        return false;
-    }
-
-    private static boolean isPalindrome(String text, int length) {
-        for (int i = 0; i < (length / 2); i++) {
-            if (text.charAt(i) != text.charAt(length - i - 1))
+    private static boolean isPalindrome(String text) {
+        for (int i = 0; i < (text.length() / 2); i++) {
+            if (text.charAt(i) != text.charAt(text.length() - i - 1))
                 return false;
         }
         return true;
     }
 
-    private static boolean isOneChar(String text, int length) {
-        for (int i = 0; i < length - 2; i++) {
+    private static boolean isOneChar(String text) {
+        for (int i = 0; i < text.length() - 2; i++) {
             if (text.charAt(i) != text.charAt(i + 1))
                 return false;
         }
         return true;
     }
 
-    private static boolean isFloorAscending(String text, int length) {
-        for (int i = 0; i < length - 2; i++) {
+    private static boolean isFloorAscending(String text) {
+        for (int i = 0; i < text.length() - 2; i++) {
             if (text.codePointAt(i) > text.codePointAt(i + 1))
                 return false;
         }
         return true;
+    }
+
+    private static void updateCounter(String currentText) {
+        if (currentText.length() == 3) counter3.incrementAndGet();
+        if (currentText.length() == 4) counter4.incrementAndGet();
+        if (currentText.length() == 5) counter5.incrementAndGet();
     }
 }
